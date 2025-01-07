@@ -2960,6 +2960,7 @@ class VllmConfig:
     simplifies passing around the distinct configurations in the codebase.
     """
 
+    already_loaded_weights: Optional[Dict] = None
     model_config: ModelConfig = field(default=None, init=True)  # type: ignore
     cache_config: CacheConfig = field(default=None, init=True)  # type: ignore
     parallel_config: ParallelConfig = field(default_factory=ParallelConfig,

@@ -43,7 +43,6 @@ def get_model_architecture(
         model_cls = as_classification_model(model_cls)
     elif model_config.task == "reward":
         model_cls = as_reward_model(model_cls)
-
     return model_cls, arch
 
 

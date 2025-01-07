@@ -86,6 +86,7 @@ def nullable_kvs(val: str) -> Optional[Mapping[str, int]]:
 class EngineArgs:
     """Arguments for vLLM engine."""
     model: str = 'facebook/opt-125m'
+    already_loaded_weights: Optional[Dict] = None
     served_model_name: Optional[Union[str, List[str]]] = None
     tokenizer: Optional[str] = None
     task: TaskOption = "auto"
@@ -1236,6 +1237,7 @@ class EngineArgs:
         )
 
         config = VllmConfig(
+            already_loaded_weights=self.already_loaded_weights,
             model_config=model_config,
             cache_config=cache_config,
             parallel_config=parallel_config,

@@ -289,7 +289,8 @@ class DefaultModelLoader(BaseModelLoader):
         if len(hf_weights_files) == 0:
             raise RuntimeError(
                 f"Cannot find any model weights with `{model_name_or_path}`")
-
+        print("HF WEIGHTS FILES")
+        print(hf_weights_files)
         return hf_folder, hf_weights_files, use_safetensors
 
     def _get_weights_iterator(
@@ -364,8 +365,15 @@ class DefaultModelLoader(BaseModelLoader):
                 model = _initialize_model(vllm_config=vllm_config)
 
             weights_to_load = {name for name, _ in model.named_parameters()}
-            loaded_weights = model.load_weights(
-                self._get_all_weights(model_config, model))
+            
+            # If already_loaded_weights is not None, then it's a dict of weights
+            # that have already been loaded. Just convert the dict to Iterable[Tuple[str, torch.Tensor]]
+            if vllm_config.already_loaded_weights is not None:
+                loaded_weights = model.load_weights([(k, v) for k, v in vllm_config.already_loaded_weights.items()])
+            else:
+                loaded_weights = model.load_weights(
+                    self._get_all_weights(model_config, model))
+            
             # We only enable strict check for non-quantized models
             # that have loaded weights tracking currently.
             if model_config.quantization is None and loaded_weights is not None:

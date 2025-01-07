@@ -150,6 +150,7 @@ class LLM:
     def __init__(
         self,
         model: str,
+        already_loaded_weights = None,
         tokenizer: Optional[str] = None,
         tokenizer_mode: str = "auto",
         skip_tokenizer_init: bool = False,
@@ -182,7 +183,6 @@ class LLM:
         Note: if enforce_eager is unset (enforce_eager is None)
         it defaults to False.
         '''
-
         if "disable_log_stats" not in kwargs:
             kwargs["disable_log_stats"] = True
 
@@ -197,6 +197,7 @@ class LLM:
 
         engine_args = EngineArgs(
             model=model,
+            already_loaded_weights=already_loaded_weights,
             task=task,
             tokenizer=tokenizer,
             tokenizer_mode=tokenizer_mode,
